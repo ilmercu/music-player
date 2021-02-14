@@ -4,9 +4,9 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:swipeable/swipeable.dart';
 
 class SongsList extends StatefulWidget {
-  SongsList({Key key, this.title}) : super(key: key);
+  SongsList({Key key, this.updateCurrentSong}) : super(key: key);
 
-  final String title;
+  final updateCurrentSong;
 
   @override
   _SongsListState createState() => _SongsListState();
@@ -53,6 +53,7 @@ class _SongsListState extends State<SongsList> {
       builder: (BuildContext context, AsyncSnapshot<List<SongInfo>> snapshot){
         if (snapshot.hasData){
           return ListView.builder(
+            padding: EdgeInsets.only(bottom: 120.0),
             itemCount: snapshot.data.length,
             itemBuilder: (context, index){
               final item = snapshot.data[index];
@@ -63,6 +64,7 @@ class _SongsListState extends State<SongsList> {
                   onSwipeLeft: () {
                   },
                   onSwipeRight: () {
+                    widget.updateCurrentSong(item);
                   },
                   child: Container(
                     height: 60.0,
