@@ -4,9 +4,10 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:swipeable/swipeable.dart';
 
 class SongsList extends StatefulWidget {
-  SongsList({Key key, this.updateCurrentSong}) : super(key: key);
+  SongsList({Key key, this.playSong, this.pauseSong}) : super(key: key);
 
-  final updateCurrentSong;
+  final playSong;
+  final pauseSong;
 
   @override
   _SongsListState createState() => _SongsListState();
@@ -53,7 +54,7 @@ class _SongsListState extends State<SongsList> {
       builder: (BuildContext context, AsyncSnapshot<List<SongInfo>> snapshot){
         if (snapshot.hasData){
           return ListView.builder(
-            padding: EdgeInsets.only(bottom: 120.0),
+            padding: EdgeInsets.only(bottom: 80.0),
             itemCount: snapshot.data.length,
             itemBuilder: (context, index){
               final item = snapshot.data[index];
@@ -62,9 +63,10 @@ class _SongsListState extends State<SongsList> {
                 child: Swipeable(
                   threshold: 60.0,
                   onSwipeLeft: () {
+                    widget.pauseSong();
                   },
                   onSwipeRight: () {
-                    widget.updateCurrentSong(item);
+                    widget.playSong(item);
                   },
                   child: Container(
                     height: 60.0,
@@ -94,11 +96,11 @@ class _SongsListState extends State<SongsList> {
                             children: <Widget>[
                               Text(
                                 item.title,
-                                style: TextStyle(fontSize: 18.0),
+                                style: TextStyle(fontSize: 16.0),
                               ),
                               Text(
                                 item.artist,
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 14.0),
                               ),
                             ],
                           ),
@@ -127,7 +129,7 @@ class _SongsListState extends State<SongsList> {
                         ),
                         Container(
                           child: Icon(
-                            Icons.stop,
+                            Icons.pause,
                             color: Colors.black,
                             size: 30.0,
                           ),
