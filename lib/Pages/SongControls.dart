@@ -1,15 +1,16 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
-class SongControls extends StatefulWidget {
-  SongControls({Key key, this.title, this.currentSong, this.audioPlayerState, this.playOrPauseSong}) : super(key: key);
+import '../Models/Song.dart';
 
-  final String title;
-  final SongInfo currentSong;
+class SongControls extends StatefulWidget {
+  SongControls({Key key, this.song, this.audioPlayerState, this.resumeOrPauseSong}) : super(key: key);
+
+  final Song song;
   final AudioPlayerState audioPlayerState;
 
-  final playOrPauseSong;
+  final resumeOrPauseSong;
 
   @override
   _SongControlsState createState() => _SongControlsState();
@@ -25,6 +26,10 @@ class _SongControlsState extends State<SongControls> {
     if (AudioPlayerState.PLAYING == widget.audioPlayerState)
       icon = Icons.pause;
 
+    print(widget.song.currentSongIndex);
+
+    var currentSong = widget.song.getCurrentSong();
+
     return Positioned(
       bottom: 0,
       child: Container(
@@ -37,11 +42,11 @@ class _SongControlsState extends State<SongControls> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  null != widget.currentSong ? widget.currentSong.title : '-',
+                  null == currentSong ? '-' : currentSong.title,
                   style: TextStyle(fontSize: 18.0),
                 ),
                 Text(
-                  null != widget.currentSong ? widget.currentSong.artist : '-',
+                  null == currentSong ? '-' : currentSong.artist,
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -56,7 +61,7 @@ class _SongControlsState extends State<SongControls> {
                   size: 30.0,
                 ),
                 onPressed: () {
-                  widget.playOrPauseSong();
+                  widget.resumeOrPauseSong();
                 },
               ),
             ),
