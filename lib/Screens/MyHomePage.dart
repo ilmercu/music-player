@@ -16,10 +16,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Song song;
+  
+  @override
+  void initState() {
+    super.initState();
+    song = Song();
+
+    song.audioPlayer.onPlayerCompletion.listen((event) {
+      song.nextSong();
+
+      setState(() { });
+    });
+  }
 
   Future<void> playSong(int songIndex) async{
     await song.playSong(songIndex);
-    print(song.currentSongIndex);
     setState(() { });
   }
   
@@ -37,19 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> resumeOrPauseSong() async {
     await song.resumeOrPauseSong();
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    song = new Song();
-
-    song.audioPlayer.onPlayerCompletion.listen((event) {
-      song.nextSong();
-
-      setState(() { });
-      //print("traccia finita, stato del player " + audioPlayer.state.toString());
-    });
   }
 
   @override

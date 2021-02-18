@@ -35,8 +35,6 @@ class Song {
   }
 
   static Future<List<SongInfo>> getSongs() async {
-    //await Future.delayed(const Duration(seconds: 2));
-
     if (await Permission.storage.request().isGranted) {
       FlutterAudioQuery audioQuery = FlutterAudioQuery();
       return await audioQuery.getSongs();
@@ -46,19 +44,16 @@ class Song {
   }
 
   Future<int> playSong(int songIndex) async{
-    //audioPlayer.state = AudioPlayerState.PLAYING;
     this.currentSongIndex = songIndex;
 
     return await audioPlayer.play(songsList[songIndex].filePath);
   }
 
   Future<int> pauseSong() async {
-    //audioPlayer.state = AudioPlayerState.PAUSED;
     return await audioPlayer.pause();
   }
 
   Future<int> resumeSong() async{
-    //audioPlayer.state = AudioPlayerState.PLAYING;
     return await audioPlayer.resume();
   }
 
@@ -69,12 +64,12 @@ class Song {
     return resumeSong();
   }
 
-  void nextSong(){
+  Future<int> nextSong() async{
     ++currentSongIndex;
 
-    if (currentSongIndex > songsList.length)
+    if (currentSongIndex >= songsList.length)
       currentSongIndex = 0;
 
-    playSong(currentSongIndex);
+    return playSong(currentSongIndex);
   }
 }
