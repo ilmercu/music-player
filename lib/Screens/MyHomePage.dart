@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 import '../Models/Song.dart';
-
-import '../Pages/SongsList.dart';
 import '../Pages/SongControls.dart';
+import '../Pages/SongsList.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -21,7 +20,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> playSong(int songIndex) async{
     await song.playSong(songIndex);
     print(song.currentSongIndex);
-    
     setState(() { });
   }
   
@@ -31,16 +29,20 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { });
   }
 
-  Future<void> resumeSong() async{
+  Future<void> resumeSong() async {
     await song.resumeSong();
-
-    setState(() { });
+    setState(() {});
   }
 
-  Future<void> resumeOrPauseSong() async{
+  Future<void> resumeOrPauseSong() async {
     await song.resumeOrPauseSong();
+    setState(() {});
+  }
 
-    setState(() { });
+  @override
+  void initState() {
+    song = new Song();
+    super.initState();
   }
 
   @override
@@ -54,11 +56,17 @@ class _MyHomePageState extends State<MyHomePage> {
           future: Song.getSongs(),
           builder: (BuildContext context, AsyncSnapshot<List<SongInfo>> snapshot){
             if (snapshot.hasData){
-              song = Song(snapshot.data);
+              song.setSongList(snapshot.data);
               return Stack(
                 children: <Widget>[
-                  SongsList(songsList: song.songsList, playSong: playSong, pauseSong: pauseSong),
-                  SongControls(song: song, audioPlayerState: Song.audioPlayer.state, resumeOrPauseSong: resumeOrPauseSong),
+                  SongsList(
+                      songsList: song.songsList,
+                      playSong: playSong,
+                      pauseSong: pauseSong),
+                  SongControls(
+                      songInfo: song.getCurrentSong(),
+                      audioPlayerState: song.getStateSong(),
+                      resumeOrPauseSong: resumeOrPauseSong),
                 ],
               );
             }

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
-import '../Models/Song.dart';
-
 class SongControls extends StatefulWidget {
-  SongControls({Key key, this.song, this.audioPlayerState, this.resumeOrPauseSong}) : super(key: key);
+  SongControls(
+      {Key key, this.songInfo, this.audioPlayerState, this.resumeOrPauseSong})
+      : super(key: key);
 
-  final Song song;
+  final SongInfo songInfo;
   final AudioPlayerState audioPlayerState;
 
   final resumeOrPauseSong;
@@ -23,12 +23,9 @@ class _SongControlsState extends State<SongControls> {
 
     IconData icon = Icons.play_arrow;
 
-    if (AudioPlayerState.PLAYING == widget.audioPlayerState)
-      icon = Icons.pause;
+    if (AudioPlayerState.PLAYING == widget.audioPlayerState) icon = Icons.pause;
 
-    print(widget.song.currentSongIndex);
-
-    var currentSong = widget.song.getCurrentSong();
+    var currentSong = widget.songInfo;
 
     return Positioned(
       bottom: 0,

@@ -1,43 +1,49 @@
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class Song{
-  static FlutterAudioQuery audioQuery = FlutterAudioQuery();
-  static AudioPlayer audioPlayer = AudioPlayer();
+class Song {
+  final AudioPlayer audioPlayer = AudioPlayer();
   List<SongInfo> songsList;
   int currentSongIndex;
 
-  Song(List<SongInfo> songsList) {
-    this.songsList = songsList;
+  Song() {
     this.currentSongIndex = -1;
-    
     audioPlayer.onPlayerCompletion.listen((event) {
-      print ("traccia finita, stato del player " + audioPlayer.state.toString());
+      print("traccia finita, stato del player " + audioPlayer.state.toString());
     });
   }
 
-  SongInfo getCurrentSong(){
-    return 0 <= this.currentSongIndex ? this.songsList[currentSongIndex] : null; 
+  SongInfo getCurrentSong() {
+    return 0 <= this.currentSongIndex ? this.songsList[currentSongIndex] : null;
   }
 
-  static Future<List<SongInfo>> initSongsList() async{
+  AudioPlayerState getStateSong() {
+    return audioPlayer.state;
+  }
+
+  void setSongList(List<SongInfo> songList) {
+    this.songsList = songList;
+  }
+
+  static Future<List<SongInfo>> initSongsList() async {
     await requestPermission();
     return getSongs();
   }
 
-  static Future<void> requestPermission() async{
+  static Future<void> requestPermission() async {
     var status = await Permission.storage.status;
-    
-    if (status.isUndetermined)
-      await Permission.storage.request();
+
+    if (status.isUndetermined) await Permission.storage.request();
   }
 
-  static Future<List<SongInfo>> getSongs() async{
+  static Future<List<SongInfo>> getSongs() async {
     //await Future.delayed(const Duration(seconds: 2));
 
-    if (await Permission.storage.request().isGranted)
+    if (await Permission.storage.request().isGranted) {
+      FlutterAudioQuery audioQuery = FlutterAudioQuery();
       return await audioQuery.getSongs();
+    }
 
     return await Future.value(List<SongInfo>());
   }
