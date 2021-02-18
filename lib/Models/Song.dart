@@ -9,9 +9,6 @@ class Song {
 
   Song() {
     this.currentSongIndex = -1;
-    audioPlayer.onPlayerCompletion.listen((event) {
-      print("traccia finita, stato del player " + audioPlayer.state.toString());
-    });
   }
 
   SongInfo getCurrentSong() {
@@ -73,7 +70,11 @@ class Song {
   }
 
   void nextSong(){
-    /*print (this.currentSong.id);
-    print ()*/
+    ++currentSongIndex;
+
+    if (currentSongIndex > songsList.length)
+      currentSongIndex = 0;
+
+    playSong(currentSongIndex);
   }
 }

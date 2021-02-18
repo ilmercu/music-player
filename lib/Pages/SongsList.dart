@@ -3,10 +3,10 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:swipeable/swipeable.dart';
 
 class SongsList extends StatefulWidget {
-  SongsList({Key key, this.songsList, this.currentSong, this.playSong, this.pauseSong}) : super(key: key);
+  SongsList({Key key, this.songsList, this.currentSongIndex, this.playSong, this.pauseSong}) : super(key: key);
 
   final List<SongInfo> songsList;
-  final SongInfo currentSong;
+  final int currentSongIndex;
 
   final playSong;
   final pauseSong;
@@ -63,7 +63,7 @@ class _SongsListState extends State<SongsList> {
                           item.title,
                           style: TextStyle(
                             fontSize: 16.0,
-                            fontWeight: item == widget.currentSong ? FontWeight.bold : FontWeight.normal
+                            fontWeight: index == widget.currentSongIndex ? FontWeight.bold : FontWeight.normal
                           ),
                         ),
                         Text(

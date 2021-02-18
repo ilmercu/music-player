@@ -41,8 +41,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    song = new Song();
     super.initState();
+    song = new Song();
+
+    song.audioPlayer.onPlayerCompletion.listen((event) {
+      song.nextSong();
+
+      setState(() { });
+      //print("traccia finita, stato del player " + audioPlayer.state.toString());
+    });
   }
 
   @override
@@ -61,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   SongsList(
                       songsList: song.songsList,
+                      currentSongIndex: song.currentSongIndex,
                       playSong: playSong,
                       pauseSong: pauseSong),
                   SongControls(
