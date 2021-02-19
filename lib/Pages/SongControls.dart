@@ -4,7 +4,7 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 class SongControls extends StatefulWidget {
   SongControls(
-      {Key key, this.currentSong, this.audioPlayerState, this.currentSongPosition, this.currentSongDuration, this.resumeOrPauseSong})
+      {Key key, this.currentSong, this.audioPlayerState, this.currentSongPosition, this.currentSongDuration, this.resumeOrPauseSong, this.moveCurrentSongPosition})
       : super(key: key);
 
   final SongInfo currentSong;
@@ -13,6 +13,7 @@ class SongControls extends StatefulWidget {
   final Duration currentSongDuration;
 
   final resumeOrPauseSong;
+  final moveCurrentSongPosition;
 
   @override
   _SongControlsState createState() => _SongControlsState();
@@ -97,7 +98,7 @@ class _SongControlsState extends State<SongControls> {
                     min: 0.0,
                     max: widget.currentSongDuration.inSeconds.toDouble(),
                     onChanged: (value) {
-                      print(value);
+                      widget.moveCurrentSongPosition(value);
                     },
                   ),
                 ),

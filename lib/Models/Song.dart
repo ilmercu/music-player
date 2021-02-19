@@ -72,4 +72,13 @@ class Song {
 
     return playSong(currentSongIndex);
   }
+
+  Future<int> moveCurrentSongPosition(double position) async{
+    int hours = (position / 3600).truncate();
+    int minutes = (position / 60).truncate();
+    int seconds = position.remainder(60).truncate();
+
+    Duration newPosition = Duration(hours: hours, minutes: minutes, seconds: seconds);
+    return await audioPlayer.seek(newPosition);
+  }
 }

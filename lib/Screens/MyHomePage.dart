@@ -63,6 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+  Future<void> moveCurrentSongPosition(double position) async{
+    await song.moveCurrentSongPosition(position);
+    setState(() { });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -89,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     currentSongPosition: currentSongPosition,
                     currentSongDuration: currentSongDuration,
                     resumeOrPauseSong: resumeOrPauseSong,
+                    moveCurrentSongPosition: moveCurrentSongPosition,
                   ),
                 ],
               );
