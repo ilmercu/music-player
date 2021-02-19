@@ -19,7 +19,7 @@ class _SongsListState extends State<SongsList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: 80.0),
+      padding: widget.currentSongIndex >= 0 ? EdgeInsets.only(bottom: 120.0) : EdgeInsets.zero,
       itemCount: widget.songsList.length,
       itemBuilder: (context, index){
         final item = widget.songsList[index];

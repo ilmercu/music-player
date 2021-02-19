@@ -4,11 +4,13 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 class SongControls extends StatefulWidget {
   SongControls(
-      {Key key, this.songInfo, this.audioPlayerState, this.resumeOrPauseSong})
+      {Key key, this.currentSong, this.audioPlayerState, this.currentSongPosition, this.currentSongDuration, this.resumeOrPauseSong})
       : super(key: key);
 
-  final SongInfo songInfo;
+  final SongInfo currentSong;
   final AudioPlayerState audioPlayerState;
+  final Duration currentSongPosition;
+  final Duration currentSongDuration;
 
   final resumeOrPauseSong;
 
@@ -17,6 +19,13 @@ class SongControls extends StatefulWidget {
 }
 
 class _SongControlsState extends State<SongControls> {
+  String printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return '${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+  }
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -25,47 +34,85 @@ class _SongControlsState extends State<SongControls> {
 
     if (AudioPlayerState.PLAYING == widget.audioPlayerState) icon = Icons.pause;
 
-    var currentSong = widget.songInfo;
+    SongInfo currentSong = widget.currentSong;
+
+    if (null == currentSong || null == widget.currentSongPosition || null == widget.currentSongDuration)
+      return Container();
 
     return Positioned(
       bottom: 0,
       child: Container(
         padding: EdgeInsets.only(left: 18.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  null == currentSong ? '-' : currentSong.title,
-                  style: TextStyle(fontSize: 18.0),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      currentSong.title,
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    Text(
+                      currentSong.artist,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
                 ),
-                Text(
-                  null == currentSong ? '-' : currentSong.artist,
-                  style: TextStyle(fontSize: 15),
+                Container(
+                  padding: EdgeInsets.all(8.0),
+                  height: 60.0,
+                  child: IconButton(
+                    icon: Icon(
+                      icon,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                    onPressed: () {
+                      widget.resumeOrPauseSong();
+                    },
+                  ),
                 ),
               ],
             ),
-            Container(
-              padding: EdgeInsets.all(8.0),
-              height: 60.0,
-              child: IconButton(
-                icon: Icon(
-                  icon,
-                  color: Colors.black,
-                  size: 30.0,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    printDuration(widget.currentSongPosition),
+                  ),
                 ),
-                onPressed: () {
-                  widget.resumeOrPauseSong();
-                },
-              ),
+                SliderTheme(
+                  data: SliderThemeData(
+                    trackHeight: 1.0,
+                    thumbColor: Colors.blue,
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6)
+                  ),
+                  child: Slider(
+                    value: widget.currentSongPosition.inSeconds.toDouble(),
+                    min: 0.0,
+                    max: widget.currentSongDuration.inSeconds.toDouble(),
+                    onChanged: (value) {
+                      print(value);
+                    },
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(right: 18.0),
+                  child: Text(
+                    printDuration(widget.currentSongDuration),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
         width: deviceWidth,
-        height: 80.0,
+        height: 120.0,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [

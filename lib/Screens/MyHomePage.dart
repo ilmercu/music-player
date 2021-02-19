@@ -16,11 +16,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Song song;
-  
+  Duration currentSongPosition;
+  Duration currentSongDuration;
+
   @override
   void initState() {
     super.initState();
     song = Song();
+    
+    song.audioPlayer.onAudioPositionChanged.listen((Duration position) {
+      setState(() {
+        currentSongPosition = position;
+      });
+    });
+    
+    song.audioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        currentSongDuration = duration;
+      });
+    });
 
     song.audioPlayer.onPlayerCompletion.listen((event) {
       song.nextSong();
@@ -36,7 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
   
   Future<void> pauseSong() async{
     await song.pauseSong();
-
     setState(() { });
   }
 
@@ -65,14 +78,18 @@ class _MyHomePageState extends State<MyHomePage> {
               return Stack(
                 children: <Widget>[
                   SongsList(
-                      songsList: song.songsList,
-                      currentSongIndex: song.currentSongIndex,
-                      playSong: playSong,
-                      pauseSong: pauseSong),
+                    songsList: song.songsList,
+                    currentSongIndex: song.currentSongIndex,
+                    playSong: playSong,
+                    pauseSong: pauseSong
+                  ),
                   SongControls(
-                      songInfo: song.getCurrentSong(),
-                      audioPlayerState: song.getStateSong(),
-                      resumeOrPauseSong: resumeOrPauseSong),
+                    currentSong: song.getCurrentSong(),
+                    audioPlayerState: song.getStateSong(),
+                    currentSongPosition: currentSongPosition,
+                    currentSongDuration: currentSongDuration,
+                    resumeOrPauseSong: resumeOrPauseSong,
+                  ),
                 ],
               );
             }
