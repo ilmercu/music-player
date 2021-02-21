@@ -4,7 +4,13 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 class SongControls extends StatefulWidget {
   SongControls(
-      {Key key, this.currentSong, this.audioPlayerState, this.currentSongPosition, this.currentSongDuration, this.resumeOrPauseSong, this.moveCurrentSongPosition})
+      {Key key,
+      this.currentSong,
+      this.audioPlayerState,
+      this.currentSongPosition,
+      this.currentSongDuration,
+      this.resumeOrPauseSong,
+      this.moveCurrentSongPosition})
       : super(key: key);
 
   final SongInfo currentSong;
@@ -12,8 +18,8 @@ class SongControls extends StatefulWidget {
   final Duration currentSongPosition;
   final Duration currentSongDuration;
 
-  final resumeOrPauseSong;
   final moveCurrentSongPosition;
+  final resumeOrPauseSong;
 
   @override
   _SongControlsState createState() => _SongControlsState();
@@ -29,16 +35,16 @@ class _SongControlsState extends State<SongControls> {
 
   @override
   Widget build(BuildContext context) {
+    SongInfo currentSong = widget.currentSong;
+    if (null == currentSong ||
+        null == widget.currentSongPosition ||
+        null == widget.currentSongDuration) return Container();
+
     double deviceWidth = MediaQuery.of(context).size.width;
 
     IconData icon = Icons.play_arrow;
 
     if (AudioPlayerState.PLAYING == widget.audioPlayerState) icon = Icons.pause;
-
-    SongInfo currentSong = widget.currentSong;
-
-    if (null == currentSong || null == widget.currentSongPosition || null == widget.currentSongDuration)
-      return Container();
 
     return Positioned(
       bottom: 0,
@@ -89,9 +95,9 @@ class _SongControlsState extends State<SongControls> {
                 ),
                 SliderTheme(
                   data: SliderThemeData(
-                    trackHeight: 1.0,
-                    thumbColor: Colors.blue,
-                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6)
+                      trackHeight: 1.0,
+                      thumbColor: Colors.blue,
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6)
                   ),
                   child: Slider(
                     value: widget.currentSongPosition.inSeconds.toDouble(),
