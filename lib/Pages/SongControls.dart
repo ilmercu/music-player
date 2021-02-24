@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
@@ -6,7 +5,7 @@ class SongControls extends StatefulWidget {
   SongControls(
       {Key key,
       this.currentSong,
-      this.audioPlayerState,
+      this.playerIsPlaying,
       this.currentSongPosition,
       this.currentSongDuration,
       this.resumeOrPauseSong,
@@ -14,7 +13,7 @@ class SongControls extends StatefulWidget {
       : super(key: key);
 
   final SongInfo currentSong;
-  final AudioPlayerState audioPlayerState;
+  final bool playerIsPlaying;
   final Duration currentSongPosition;
   final Duration currentSongDuration;
 
@@ -42,9 +41,7 @@ class _SongControlsState extends State<SongControls> {
 
     double deviceWidth = MediaQuery.of(context).size.width;
 
-    IconData icon = Icons.play_arrow;
-
-    if (AudioPlayerState.PLAYING == widget.audioPlayerState) icon = Icons.pause;
+    IconData icon = widget.playerIsPlaying ? Icons.pause : Icons.play_arrow;
 
     return Positioned(
       bottom: 0,

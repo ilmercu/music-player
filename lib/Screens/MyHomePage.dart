@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:simpleMusicPlayer/Models/AudioSessionManager.dart';
 
 import '../Models/Song.dart';
 import '../Pages/SongControls.dart';
@@ -18,10 +19,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Song song;
   Duration currentSongPosition;
   Duration currentSongDuration;
+  AudioSessionManager audioSessionManager;
 
   @override
   void initState() {
     super.initState();
+
     song = Song();
     
     song.audioPlayer.onAudioPositionChanged.listen((Duration position) {
@@ -41,26 +44,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
       setState(() { });
     });
+    
+    audioSessionManager = AudioSessionManager(song);
   }
 
   Future<void> playSong(int songIndex) async{
-    await song.playSong(songIndex);
-    setState(() { });
+    if (await audioSessionManager.setActive(true)) {
+      await song.playSong(songIndex);
+      setState(() { });
+    }
   }
   
   Future<void> pauseSong() async{
-    await song.pauseSong();
-    setState(() { });
+    if (await audioSessionManager.setActive(false)){
+      await song.pauseSong();
+      setState(() { });
+    }
   }
 
   Future<void> resumeSong() async {
-    await song.resumeSong();
-    setState(() {});
+    if (await audioSessionManager.setActive(true)) {
+      await song.resumeSong();
+      setState(() {});
+    }
   }
 
   Future<void> resumeOrPauseSong() async {
-    await song.resumeOrPauseSong();
-    setState(() {});
+    if (await audioSessionManager.setActive()) {
+      await song.resumeOrPauseSong();
+      setState(() {});
+    }
   }
 
   Future<void> moveCurrentSongPosition(double position) async{
@@ -90,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SongControls(
                     currentSong: song.getCurrentSong(),
-                    audioPlayerState: song.getStateSong(),
+                    playerIsPlaying: song.playerIsPlaying(),
                     currentSongPosition: currentSongPosition,
                     currentSongDuration: currentSongDuration,
                     resumeOrPauseSong: resumeOrPauseSong,

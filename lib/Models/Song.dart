@@ -15,8 +15,8 @@ class Song {
     return 0 <= this.currentSongIndex ? this.songsList[currentSongIndex] : null;
   }
 
-  AudioPlayerState getStateSong() {
-    return audioPlayer.state;
+  bool playerIsPlaying() {
+    return AudioPlayerState.PLAYING == audioPlayer.state;
   }
 
   void setSongList(List<SongInfo> songList) {
