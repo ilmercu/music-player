@@ -9,7 +9,9 @@ class SongControls extends StatefulWidget {
       this.currentSongPosition,
       this.currentSongDuration,
       this.resumeOrPauseSong,
-      this.moveCurrentSongPosition})
+      this.moveCurrentSongPosition,
+      this.previousSong,
+      this.nextSong})
       : super(key: key);
 
   final SongInfo currentSong;
@@ -19,6 +21,8 @@ class SongControls extends StatefulWidget {
 
   final moveCurrentSongPosition;
   final resumeOrPauseSong;
+  final previousSong;
+  final nextSong;
 
   @override
   _SongControlsState createState() => _SongControlsState();
@@ -46,7 +50,7 @@ class _SongControlsState extends State<SongControls> {
     return Positioned(
       bottom: 0,
       child: Container(
-        padding: EdgeInsets.only(left: 18.0),
+        padding: EdgeInsets.only(top: 10.0, left: 18.0, right: 18.0),
         child: Column(
           children: <Widget>[
             Row(
@@ -66,19 +70,46 @@ class _SongControlsState extends State<SongControls> {
                     ),
                   ],
                 ),
-                Container(
-                  padding: EdgeInsets.all(8.0),
-                  height: 60.0,
-                  child: IconButton(
-                    icon: Icon(
-                      icon,
-                      color: Colors.black,
-                      size: 30.0,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.skip_previous,
+                          color: Colors.black,
+                          size: 40.0,
+                        ),
+                        onPressed: () {
+                          widget.previousSong();
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      widget.resumeOrPauseSong();
-                    },
-                  ),
+                    Container(
+                      child: IconButton(
+                        icon: Icon(
+                          icon,
+                          color: Colors.black,
+                          size: 40.0,
+                        ),
+                        onPressed: () {
+                          widget.resumeOrPauseSong();
+                        },
+                      ),
+                    ),
+                    Container(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.skip_next,
+                          color: Colors.black,
+                          size: 40.0,
+                        ),
+                        onPressed: () {
+                          widget.nextSong();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -106,7 +137,6 @@ class _SongControlsState extends State<SongControls> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 18.0),
                   child: Text(
                     printDuration(widget.currentSongDuration),
                   ),

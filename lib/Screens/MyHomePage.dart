@@ -28,9 +28,11 @@ class _MyHomePageState extends State<MyHomePage> {
     song = Song();
     
     song.audioPlayer.onAudioPositionChanged.listen((Duration position) {
-      setState(() {
-        currentSongPosition = position;
-      });
+      if (position <= currentSongDuration){
+        setState(() {
+          currentSongPosition = position;
+        });
+      }
     });
     
     song.audioPlayer.onDurationChanged.listen((Duration duration) {
@@ -81,6 +83,16 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { });
   }
 
+  Future<void> nextSong() async{
+    await song.nextSong();
+    setState(() { });
+  }
+
+  Future<void> previousSong() async{
+    await song.previousSong();
+    setState(() { });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -108,6 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     currentSongDuration: currentSongDuration,
                     resumeOrPauseSong: resumeOrPauseSong,
                     moveCurrentSongPosition: moveCurrentSongPosition,
+                    previousSong: previousSong,
+                    nextSong: nextSong
                   ),
                 ],
               );

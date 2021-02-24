@@ -73,6 +73,15 @@ class Song {
     return playSong(currentSongIndex);
   }
 
+  Future<int> previousSong() async{
+    --currentSongIndex;
+
+    if (currentSongIndex < 0)
+      currentSongIndex = songsList.length-1;
+
+    return playSong(currentSongIndex);
+  }
+
   Future<int> moveCurrentSongPosition(double position) async{
     int hours = (position / 3600).truncate();
     int minutes = (position / 60).truncate();
