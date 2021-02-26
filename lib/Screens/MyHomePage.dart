@@ -42,7 +42,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     song.audioPlayer.onPlayerCompletion.listen((event) {
-      song.nextSong();
+      if (song.loopEnabled)
+        song.repeatCurrentSong();
+      else
+        song.nextSong();
 
       setState(() { });
     });
@@ -93,6 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { });
   }
 
+  void loopCurrentSong(){
+    song.loopCurrentSong();
+    setState(() { });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -118,10 +126,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     playerIsPlaying: song.playerIsPlaying(),
                     currentSongPosition: currentSongPosition,
                     currentSongDuration: currentSongDuration,
+                    loopEnabled: song.loopEnabled, 
                     resumeOrPauseSong: resumeOrPauseSong,
                     moveCurrentSongPosition: moveCurrentSongPosition,
                     previousSong: previousSong,
-                    nextSong: nextSong
+                    nextSong: nextSong,
+                    loopCurrentSong: loopCurrentSong,
                   ),
                 ],
               );

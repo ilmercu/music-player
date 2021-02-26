@@ -34,7 +34,7 @@ class SongRow extends StatelessWidget {
           Flexible(
             child: Container(
               height: 60.0,
-              padding: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(left: 10.0, right: 18.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

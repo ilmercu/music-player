@@ -10,21 +10,25 @@ class SongControls extends StatefulWidget {
       this.playerIsPlaying,
       this.currentSongPosition,
       this.currentSongDuration,
+      this.loopEnabled,
       this.resumeOrPauseSong,
       this.moveCurrentSongPosition,
       this.previousSong,
-      this.nextSong})
+      this.nextSong,
+      this.loopCurrentSong})
       : super(key: key);
 
   final SongInfo currentSong;
   final bool playerIsPlaying;
   final Duration currentSongPosition;
   final Duration currentSongDuration;
+  final bool loopEnabled;
 
   final moveCurrentSongPosition;
   final resumeOrPauseSong;
   final previousSong;
   final nextSong;
+  final loopCurrentSong;
 
   @override
   _SongControlsState createState() => _SongControlsState();
@@ -97,9 +101,25 @@ class _SongControlsState extends State<SongControls> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
+                      padding: EdgeInsets.only(right: 25.0),
                       child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          Icons.shuffle,
+                          color: Colors.black,
+                          size: 20.0,
+                        ),
+                        onPressed: () {
+                          
+                        },
+                      ),
+                    ),
+                    Container(
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
                         icon: Icon(
                           Icons.skip_previous,
                           color: Colors.black,
@@ -112,6 +132,7 @@ class _SongControlsState extends State<SongControls> {
                     ),
                     Container(
                       child: IconButton(
+                        padding: EdgeInsets.zero,
                         icon: Icon(
                           icon,
                           color: Colors.black,
@@ -124,6 +145,7 @@ class _SongControlsState extends State<SongControls> {
                     ),
                     Container(
                       child: IconButton(
+                        padding: EdgeInsets.zero,
                         icon: Icon(
                           Icons.skip_next,
                           color: Colors.black,
@@ -134,12 +156,26 @@ class _SongControlsState extends State<SongControls> {
                         },
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          Icons.loop,
+                          color: widget.loopEnabled ? Colors.blue : Colors.black,
+                          size: 20.0,
+                        ),
+                        onPressed: () {
+                          widget.loopCurrentSong();
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
             width: deviceWidth,
-            height: 140.0,
+            height: 130.0,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -159,7 +195,7 @@ class _SongControlsState extends State<SongControls> {
             children: <Widget>[
               Container(
                 width: deviceWidth,
-                padding: EdgeInsets.only(bottom: 116.0),
+                padding: EdgeInsets.only(bottom: 106.0),
                 child: SliderTheme(
                   data: SliderThemeData(
                     trackHeight: 0.2,

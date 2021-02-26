@@ -6,9 +6,11 @@ class Song {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<SongInfo> songsList;
   int currentSongIndex;
+  bool loopEnabled;
 
   Song() {
     this.currentSongIndex = -1;
+    loopEnabled = false;
   }
 
   SongInfo getCurrentSong() {
@@ -73,6 +75,10 @@ class Song {
     return playSong(currentSongIndex);
   }
 
+  Future<int> repeatCurrentSong() async{
+    return playSong(currentSongIndex);
+  }
+
   Future<int> previousSong() async{
     --currentSongIndex;
 
@@ -89,5 +95,9 @@ class Song {
 
     Duration newPosition = Duration(hours: hours, minutes: minutes, seconds: seconds);
     return await audioPlayer.seek(newPosition);
+  }
+
+  void loopCurrentSong(){
+    loopEnabled = !loopEnabled;
   }
 }
