@@ -101,6 +101,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { });
   }
 
+  void enableShuffleList(){
+    song.enableShuffleList();
+    setState(() { });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -127,11 +132,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     currentSongPosition: currentSongPosition,
                     currentSongDuration: currentSongDuration,
                     loopEnabled: song.loopEnabled, 
+                    shuffleEnabled: song.shuffleEnabled, 
                     resumeOrPauseSong: resumeOrPauseSong,
                     moveCurrentSongPosition: moveCurrentSongPosition,
                     previousSong: previousSong,
                     nextSong: nextSong,
                     loopCurrentSong: loopCurrentSong,
+                    enableShuffleList: enableShuffleList,
                   ),
                 ],
               );

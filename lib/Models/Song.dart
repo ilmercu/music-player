@@ -4,13 +4,17 @@ import 'package:permission_handler/permission_handler.dart';
 
 class Song {
   final AudioPlayer audioPlayer = AudioPlayer();
-  List<SongInfo> songsList;
   int currentSongIndex;
+  List<SongInfo> songsList;
+  int currentShuffledIndex;
+  List<int> shuffledIndexes;
   bool loopEnabled;
+  bool shuffleEnabled;
 
   Song() {
-    this.currentSongIndex = -1;
+    currentSongIndex = -1;
     loopEnabled = false;
+    shuffleEnabled = false;
   }
 
   SongInfo getCurrentSong() {
@@ -67,10 +71,20 @@ class Song {
   }
 
   Future<int> nextSong() async{
-    ++currentSongIndex;
+    if (shuffleEnabled){
+      ++currentShuffledIndex;
 
-    if (currentSongIndex >= songsList.length)
-      currentSongIndex = 0;
+      if (currentShuffledIndex >= shuffledIndexes.length)
+        currentShuffledIndex = 0;
+
+      currentSongIndex = shuffledIndexes[currentShuffledIndex];
+    }
+    else{
+      ++currentSongIndex;
+
+      if (currentSongIndex >= songsList.length)
+        currentSongIndex = 0;
+    }
 
     return playSong(currentSongIndex);
   }
@@ -80,10 +94,20 @@ class Song {
   }
 
   Future<int> previousSong() async{
-    --currentSongIndex;
+    if (shuffleEnabled){
+      --currentShuffledIndex;
 
-    if (currentSongIndex < 0)
-      currentSongIndex = songsList.length-1;
+      if (currentShuffledIndex < 0)
+        currentShuffledIndex = shuffledIndexes.length-1;
+
+      currentSongIndex = shuffledIndexes[currentShuffledIndex];
+    }
+    else{
+      --currentSongIndex;
+
+      if (currentSongIndex < 0)
+        currentSongIndex = songsList.length-1;
+    }
 
     return playSong(currentSongIndex);
   }
@@ -99,5 +123,25 @@ class Song {
 
   void loopCurrentSong(){
     loopEnabled = !loopEnabled;
+  }
+
+  void enableShuffleList(){
+    shuffleEnabled = !shuffleEnabled;
+
+    if (shuffleEnabled){
+      shuffledIndexes = List<int>();
+
+      currentShuffledIndex = 0;
+
+      for (int i = 0; i < songsList.length; ++i){
+        if (i == currentSongIndex)
+          continue;
+
+        shuffledIndexes.add(i);
+      }
+
+      shuffledIndexes.shuffle();
+      shuffledIndexes.insert(0, currentSongIndex);
+    }
   }
 }

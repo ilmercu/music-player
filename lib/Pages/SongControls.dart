@@ -11,11 +11,13 @@ class SongControls extends StatefulWidget {
       this.currentSongPosition,
       this.currentSongDuration,
       this.loopEnabled,
+      this.shuffleEnabled,
       this.resumeOrPauseSong,
       this.moveCurrentSongPosition,
       this.previousSong,
       this.nextSong,
-      this.loopCurrentSong})
+      this.loopCurrentSong,
+      this.enableShuffleList})
       : super(key: key);
 
   final SongInfo currentSong;
@@ -23,12 +25,14 @@ class SongControls extends StatefulWidget {
   final Duration currentSongPosition;
   final Duration currentSongDuration;
   final bool loopEnabled;
+  final bool shuffleEnabled;
 
   final moveCurrentSongPosition;
   final resumeOrPauseSong;
   final previousSong;
   final nextSong;
   final loopCurrentSong;
+  final enableShuffleList;
 
   @override
   _SongControlsState createState() => _SongControlsState();
@@ -109,11 +113,11 @@ class _SongControlsState extends State<SongControls> {
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           Icons.shuffle,
-                          color: Colors.black,
+                          color: widget.shuffleEnabled ? Colors.blue : Colors.black,
                           size: 20.0,
                         ),
                         onPressed: () {
-                          
+                          widget.enableShuffleList();
                         },
                       ),
                     ),
