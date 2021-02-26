@@ -31,25 +31,29 @@ class SongRow extends StatelessWidget {
               size: 30.0,
             ),
           ),
-          Container(
-            height: 60.0,
-            padding: EdgeInsets.only(left: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  item.title,
-                  style: TextStyle(
+          Flexible(
+            child: Container(
+              height: 60.0,
+              padding: EdgeInsets.only(left: 10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    item.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
                       fontSize: 16.0,
-                      fontWeight:
-                          isPlaying ? FontWeight.bold : FontWeight.normal),
-                ),
-                Text(
-                  item.artist,
-                  style: TextStyle(fontSize: 14.0),
-                ),
-              ],
+                      fontWeight: isPlaying ? FontWeight.bold : FontWeight.normal
+                    ),
+                  ),
+                  Text(
+                    item.artist,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

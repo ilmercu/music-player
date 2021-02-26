@@ -21,7 +21,7 @@ class SongsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: currentSongIndex >= 0
-          ? EdgeInsets.only(bottom: 120.0)
+          ? EdgeInsets.only(bottom: 140.0)
           : EdgeInsets.zero,
       itemCount: songsList.length,
       itemBuilder: (context, index) {

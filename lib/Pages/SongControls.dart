@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
+import '../Widgets/TrackShape.dart';
+
 class SongControls extends StatefulWidget {
   SongControls(
       {Key key,
@@ -47,28 +49,51 @@ class _SongControlsState extends State<SongControls> {
 
     IconData icon = widget.playerIsPlaying ? Icons.pause : Icons.play_arrow;
 
-    return Positioned(
-      bottom: 0,
-      child: Container(
-        padding: EdgeInsets.only(top: 10.0, left: 18.0, right: 18.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          bottom: 0,
+          child: Container(
+            padding: EdgeInsets.only(left: 18.0, right: 18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
+                Container(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          printDuration(widget.currentSongPosition),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          printDuration(widget.currentSongDuration),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text(
                       currentSong.title,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 18.0),
                     ),
-                    Text(
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    child: Text(
                       currentSong.artist,
-                      style: TextStyle(fontSize: 15),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 15.0),
                     ),
-                  ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -113,19 +138,34 @@ class _SongControlsState extends State<SongControls> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    printDuration(widget.currentSongPosition),
-                  ),
+            width: deviceWidth,
+            height: 140.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
                 ),
-                SliderTheme(
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: deviceWidth,
+                padding: EdgeInsets.only(bottom: 116.0),
+                child: SliderTheme(
                   data: SliderThemeData(
-                      trackHeight: 1.0,
-                      thumbColor: Colors.blue,
-                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6)
+                    trackHeight: 0.2,
+                    thumbColor: Colors.blue,
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+                    trackShape: TrackShape(),
                   ),
                   child: Slider(
                     value: widget.currentSongPosition.inSeconds.toDouble(),
@@ -136,29 +176,11 @@ class _SongControlsState extends State<SongControls> {
                     },
                   ),
                 ),
-                Container(
-                  child: Text(
-                    printDuration(widget.currentSongDuration),
-                  ),
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
-        width: deviceWidth,
-        height: 120.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-      ),
+      ],
     );
   }
 }
